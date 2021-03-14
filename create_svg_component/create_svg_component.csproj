@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>create_svg_component</AssemblyName>
+    <RootNamespace>create_svg_component</RootNamespace>
+  </PropertyGroup>
+
+</Project>
