@@ -99,16 +99,24 @@ namespace create_svg_component
                 svg = CreateComponent(svg);
 
                 string fileNameWithFolder = Path.Combine(outputFolder, fileName + ".tsx");
-                File.WriteAllText(fileNameWithFolder, svg);
 
-                if (moveFolder != null && Directory.Exists(moveFolder))
+                if (!File.Exists(fileNameWithFolder))
                 {
-                    string outFile = Path.Combine(moveFolder, Path.GetFileName(inputFile));
-                    File.Move(inputFile, outFile);
+                    File.WriteAllText(fileNameWithFolder, svg);
+                    if (moveFolder != null && Directory.Exists(moveFolder))
+                    {
+                        string outFile = Path.Combine(moveFolder, Path.GetFileName(inputFile));
+                        File.Move(inputFile, outFile);
+                    }
+
+                    Console.WriteLine("Component created: " + fileName + ".tsx.");
+                    processedCount++;
+                }
+                else
+                {
+                    Console.WriteLine("Error: File '" + fileName + ".tsx' already exist.");
                 }
 
-                Console.WriteLine("Component created: " + fileName + ".tsx");
-                processedCount++;
             }
             catch (Exception ex)
             {
@@ -125,6 +133,7 @@ namespace create_svg_component
         static string GetSvg(string input)
         {
             string svg = Regex.Match(input, "<svg.*?</svg>", RegexOptions.Singleline | RegexOptions.IgnoreCase).Value;
+            svg = Regex.Replace(svg, @"<title>.*?</title>", "");
             svg = Regex.Replace(svg, @"\s\s+", " ");
             svg = Regex.Replace(svg, @"<g>\s*</g>", "", RegexOptions.IgnoreCase);
             svg = Regex.Replace(svg, @">\s+<", "><");
